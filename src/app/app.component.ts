@@ -18,9 +18,15 @@ export class AppComponent {
       'firstName': new FormControl(null, Validators.required),
       'lastName': new FormControl(null, Validators.required),
       'email': new FormControl(null, [Validators.required, Validators.email]),
-      'password': new FormControl(null, [Validators.required],CustomValidators.asyncStrongPassword),
+      'password': new FormControl(null, [Validators.required, Validators.minLength(6)]),
+      'confirmPassword': new FormControl(null, [Validators.required, Validators.minLength(6)]),
       'pincode': new FormControl(null, [Validators.required],CustomValidators.asyncInvalidPincode),
-    })
+    }, passwordMatchValidator);
+
+    function passwordMatchValidator(g: FormGroup) {
+      return g.get('password').value === g.get('confirmPassword').value
+         ? null : {'mismatch': true};
+   }
   }
 
   onSaveProject() {
